@@ -29,6 +29,34 @@ body {
 .logo img {
   height: 100px;
 }
+.image-gallery {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 20px 30px;
+  margin-bottom: 2rem;
+  scroll-behavior: smooth;
+}
+
+.image-scroll {
+  display: flex;
+  gap: 15px;
+}
+
+.image-scroll img {
+  height: 260px;
+  width: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.image-scroll img:hover {
+  transform: scale(1.03);
+}
+
+
 
 /* Navigation Links */
 .nav-links {
@@ -73,21 +101,6 @@ body {
   font-size: 0.95rem;
 }
 
-.carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 10px;
-  padding: 20px 40px;
-}
-
-.carousel img {
-  width: 600px;
-  height: 500px;
-  object-fit: cover;
-  border-radius: 10px;
-  scroll-snap-align: start;
-}
 .hotel-info {
   margin-left: 100px;
   padding: 0 40px 20px;
@@ -256,6 +269,7 @@ body {
       font-weight: bold;
       width: 100%;
     }
+
 .footer {
   background-color: #0c1e4a;
   color: white;

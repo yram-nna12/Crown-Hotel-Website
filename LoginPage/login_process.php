@@ -1,25 +1,32 @@
 <?php
 session_start();
-require './db.php'; // make sure this connects to your 'crownh_db' database
+require './db.php'; // Ensure correct database connection to crownh_db
 
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username_or_email = trim($_POST['username']);
+    // Normalize input
+    $username_or_email = strtolower(trim($_POST['username']));
     $password = $_POST['password'];
 
-    // Prepare the SQL statement to avoid SQL injection
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+    // Debug (optional)
+    // echo "Input: $username_or_email<br>";
+
+    // Case-insensitive query
+    $stmt = $conn->prepare("
+        SELECT * FROM users 
+        WHERE LOWER(TRIM(username)) = ? 
+           OR LOWER(TRIM(email)) = ?
+    ");
     $stmt->bind_param("ss", $username_or_email, $username_or_email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     // Check if user exists
-    if ($result->num_rows === 1) {
+    if ($result && $result->num_rows === 1) {
         $user = $result->fetch_assoc();
 
-        // Verify the password
+        // Verify hashed password
         if (password_verify($password, $user['password'])) {
-            // Store user session
+            // ✅ Success: Set session and redirect
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
             $_SESSION['role'] = $user['role'];
@@ -43,6 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION['error'] = "❌ Invalid request.";
 }
 
+// Redirect back to login page
 header("Location: index.php");
 exit();
-?>

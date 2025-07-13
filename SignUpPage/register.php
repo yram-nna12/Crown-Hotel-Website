@@ -41,9 +41,10 @@ if ($res->num_rows > 0) {
 $username = strtolower($first_name . '.' . $last_name);
 $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 $role = 'client';
+$created_at = date('Y-m-d H:i:s');
 
-$stmt = $conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
-$stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
+$stmt = $conn->prepare("INSERT INTO users (username, email, password, role, first_name, last_name, phone, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssssss", $username, $email, $hashed_password, $role, $first_name, $last_name, $phone, $created_at);
 
 if ($stmt->execute()) {
     unset($_SESSION['old_input']);
